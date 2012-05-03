@@ -69,10 +69,10 @@ function value = speech2text()
 configData;
 value = '';
 r = audiorecorder(8000, 16, 1);
-one_hmm = load('project/model/one.hmm.mat');
-two_hmm = load('project/model/two.hmm.mat');
-three_hmm = load('project/model/three.hmm.mat');
-four_hmm = load('project/model/four.hmm.mat');
+one_hmm = load([config.modelFolder '/one.hmm.mat']);
+two_hmm = load([config.modelFolder '/two.hmm.mat']);
+three_hmm = load([config.modelFolder '/three.hmm.mat']);
+four_hmm = load([config.modelFolder '/four.hmm.mat']);
 while( isempty(value) )
   % value = input('', 's');
     if( ~config.DEBUG )
@@ -81,7 +81,7 @@ while( isempty(value) )
        disp('Done!');
        data = getaudiodata(r);
     else
-       data = wavread('project/training/two-three-one-four.wav');
+       data = wavread([config.trainingFolder '/two-three-one-four.wav']);
        plot(data);
        pause(5);
     end
