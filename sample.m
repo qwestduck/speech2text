@@ -75,13 +75,15 @@ three_hmm = load('project/model/three.hmm.mat');
 four_hmm = load('project/model/four.hmm.mat');
 while( isempty(value) )
   % value = input('', 's');
-    disp('Recording...');
-    recordblocking( r, 2 );
-    disp('Done!');
-    data = getaudiodata(r);
-    
-    if( config.DEBUG )
-        plot(data); 
+    if( ~config.DEBUG )
+       disp('Recording...');
+       recordblocking( r, 2 );
+       disp('Done!');
+       data = getaudiodata(r);
+    else
+       data = wavread('project/training/two-three-one-four.wav');
+       plot(data);
+       pause(5);
     end
     
     % scale dataset for 8 khz sampling rate
