@@ -24,6 +24,8 @@ vocabulary = {'one', 'two', 'three', 'four'};
 NhiddenStates = 3;
 MgaussianMixtures = 3;
 
+config.DEBUG = true;
+
 config.trainingFolder = trainingFolder;
 config.testingFolder = testingFolder;
 config.modelFolder = modelFolder;
