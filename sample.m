@@ -86,12 +86,21 @@ while( isempty(value) )
     
     config.M = config.featureSize;
     
-    [frames, centers] = framing(data(S_array(1)*8 : S_array(2)*8), fs, config.winLen, config.winSpa);
+    [frames, centers] = framing(data(S_array(1)*8 : S_array(2)*8), 8000, config.winLen, config.winSpa);
     [features, labels] = shortTimeAnalysis(frames, centers, config);
     
     THRESHHOLD = -inf;
     
-    disp(one_hmm.hmm);
+    if( config.DEBUG)
+       disp('DEBUG: frames');
+       disp(frames);
+       disp('DEBUG: centers');
+       disp(centers);
+       disp('DEBUG: features');
+       disp(features);
+       disp('DEBUG: Hmm');
+       disp(one_hmm.hmm);
+    end
     
     likelihoods = [-inf -inf -inf -inf]
     
