@@ -5,7 +5,7 @@ function organizeObservationPerWord( trainingFolder, vocabulary, featureType, mo
 for i=1:length(vocabulary)
     observation = loadFeatures(sampleLists{i}, ['.' featureType '.mat'] );
     word = vocabulary{i};
-    fn  = [modelFolder vocabulary{i} '.observation.mat'];
+    fn  = [modelFolder '/' vocabulary{i} '.observation.mat'];
     save( fn, 'observation', 'word');
     disp([ fn ' saved for word ' word]);
 end
