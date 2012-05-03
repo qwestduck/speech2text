@@ -79,6 +79,10 @@ while( isempty(value) )
     recordblocking( r, 2 );
     disp('Done!');
     data = getaudiodata(r);
+
+    % scale dataset for 8 khz sampling rate
+    data = data .* 8;
+
     S = getSegmentations(data, 8000, {''});
 
     % grab the start and end-times of the first segment
@@ -86,7 +90,12 @@ while( isempty(value) )
     
     config.M = config.featureSize;
     
-    [frames, centers] = framing(data(S_array(1)*8 : S_array(2)*8), 8000, config.winLen, config.winSpa);
+    initial = S_array(1);
+    duration = initial + S_array(2);
+
+    data_subset = data(initial : duration);
+
+    [frames, centers] = framing(data_subset, 8000, config.winLen, config.winSpa);
     [features, labels] = shortTimeAnalysis(frames, centers, config);
     
     THRESHHOLD = -inf;
