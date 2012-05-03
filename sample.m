@@ -79,7 +79,11 @@ while( isempty(value) )
     recordblocking( r, 2 );
     disp('Done!');
     data = getaudiodata(r);
-
+    
+    if( config.DEBUG )
+        plot(data); 
+    end
+    
     % scale dataset for 8 khz sampling rate
     data = data .* 8;
 
