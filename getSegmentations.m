@@ -37,9 +37,10 @@ labels = labels';
 labels = round(labels / fs * 1000);
 labels(:,2) = labels(:,2)-labels(:,1);
 labels = trimSegmentation(labels, length(targetWords));
-% throw away the extra ones by ranking of duration
-labels = [targetWords(:), cell(length(targetWords), 1), num2cell(labels(1:length(targetWords),:))];
-
+if( ~isempty(labels) )
+  % throw away the extra ones by ranking of duration
+  labels = [targetWords(:), cell(length(targetWords), 1), num2cell(labels(1:length(targetWords),:))];
+end
 end
 
 % trim label data according to the second column of duration
@@ -47,18 +48,18 @@ end
 function labels = trimSegmentation(labels, len)
 
 if( isempty(labels) ) 
-    err = MException('', ...
-        'Attempt to trim empty array');
-    throw(err);
+    % err = MException('', ...
+    %    'Attempt to trim empty array');
+    % throw(err);
+else
+   duration = labels(:,2);
+   [dsorted, sortidx] = sort(duration);
+
+   sortidx = flipud(sortidx);
+   sortidx = sortidx(1:len);
+   sortidx = sort(sortidx);
+
+   labels = labels(sortidx,:);
 end
-duration = labels(:,2);
-[dsorted, sortidx] = sort(duration);
-
-sortidx = flipud(sortidx);
-sortidx = sortidx(1:len);
-sortidx = sort(sortidx);
-
-labels = labels(sortidx,:);
-
 end
 
