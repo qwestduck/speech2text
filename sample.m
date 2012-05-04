@@ -23,7 +23,7 @@
 % ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE 
 % POSSIBILITY OF SUCH DAMAGE.
 
-function loop2()
+function sample()
     global giveInstruction;
 
     giveInstruction = true;
@@ -116,6 +116,11 @@ while( isempty(value) )
 
     S = getSegmentations(data, 8000, {''});
 
+    if( isempty(S) )
+        disp('I couldn''t hear you!');
+        continue;
+    end    
+      
     % grab the start and end-times of the first segment
     S_array = cell2mat(S(3:4));
     
@@ -142,18 +147,33 @@ while( isempty(value) )
        disp(one_hmm.hmm);
     end
     
-    likelihoods = [-inf -inf -inf -inf]
+    likelihoods = [-inf -inf -inf -inf];
     
     [alpha, likelihoods(1)] = one_hmm.hmm.forward(features);
-    [alpha, likelihood(2)] = two_hmm.hmm.forward(features);
-    [alpha, likelihood(3)] = three_hmm.hmm.forward(features);
-    [alpha, likelihood(4)] = four_hmm.hmm.forward(features);
+    [alpha, likelihoods(2)] = two_hmm.hmm.forward(features);
+    [alpha, likelihoods(3)] = three_hmm.hmm.forward(features);
+    [alpha, likelihoods(4)] = four_hmm.hmm.forward(features);
     
-    values = ['one' 'two' 'three' 'four'];
+    % if( config.DEBUG )
+       disp(likelihoods);
+    % end
     
-    [C I] = max(likelihoods)
+    [C I] = max(likelihoods);
     if(C > THRESHHOLD)
-       value = values(I);
+      switch I
+          case 1
+              value = 'one';
+          case 2
+              value = 'two';
+          case 3
+              value = 'three';
+          case 4
+              value = 'four';
+          otherwise
+              continue;
+       end
+        
+       disp(['You said ' value]);
        break;
     end
 end
