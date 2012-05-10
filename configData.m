@@ -41,13 +41,18 @@ winType = 'hamming';
 Nfft = 512;
 
 featureSize = 13;
-featureType = 'MFCC';
+% featureType = 'MFCC';
+featureType = 'NCC';
 
 % backend modeling configurations
 % note that silence model will be added by default
-vocabulary = {'one', 'two', 'three', 'four'};
-NhiddenStates = 3;
-MgaussianMixtures = 3;
+% vocabulary = {'one', 'tow', 'three', 'four'};
+% NhiddenStates = 3;
+% MgaussianMixtures = 3;
+
+vocabulary = {'f', 'm'};
+NhiddenStates = 1;
+MgaussianMixtures = 2;
 
 config.DEBUG = true;
 
