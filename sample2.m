@@ -38,44 +38,57 @@ while( isempty(value) )
     data_subset = data(initial : duration);
 
     [frames, centers] = framing(data_subset, 8000, config.winLen, config.winSpa);
-    [features, labels] = shortTimeAnalysis(frames, centers, config);
+    [r, lagIndex] = frameNCC(frames);
+    % [features, labels] = shortTimeAnalysis(frames, centers, config);
+    fs = 8000;
+    freq_min = 70; % Remove 60 Hz fan noise
+    freq_max = 600;
+   
+    [r_max, i_max] = max( r(fs / freq_max : fs / freq_min ));
     
-    THRESHHOLD = -inf;
+    disp(i_max);
     
-    if( config.DEBUG)
-       disp('DEBUG: frames');
-       disp(frames);
-       disp('DEBUG: centers');
-       disp(centers);
-       disp('DEBUG: features');
-       disp(features);
-       disp('DEBUG: Hmm');
-       disp(m_hmm.hmm);
-    end
+    f0 = fs / (i_max + fs / freq_max );
     
-    likelihoods = [-inf -inf];
+    disp(['Pitch is ' num2str(f0) ' Hz']);
     
-    [alpha, likelihoods(1)] = m_hmm.hmm.forward(features);
-    [alpha, likelihoods(2)] = f_hmm.hmm.forward(features);
     
-    if( config.DEBUG )
-      disp(likelihoods);
-    end
+    % THRESHHOLD = -inf;
     
-    [C I] = max(likelihoods);
-    if(C > THRESHHOLD)
-      switch I
-          case 1
-              value = 'Male';
-          case 2
-              value = 'Female';
-          otherwise
-              continue;
-       end
+    % if( config.DEBUG)
+       % disp('DEBUG: frames');
+       % disp(frames);
+       % disp('DEBUG: centers');
+       % disp(centers);
+       % disp('DEBUG: features');
+       % disp(features);
+       % disp('DEBUG: Hmm');
+       % disp(m_hmm.hmm);
+    % end
+    
+    % likelihoods = [-inf -inf];
+    
+    % [alpha, likelihoods(1)] = m_hmm.hmm.forward(features);
+    % [alpha, likelihoods(2)] = f_hmm.hmm.forward(features);
+    
+    % if( config.DEBUG )
+    %  disp(likelihoods);
+    %end
+    
+    % [C I] = max(likelihoods);
+    % if(C > THRESHHOLD)
+    %   switch I
+    %      case 1
+    %          value = 'Male';
+    %      case 2
+    %          value = 'Female';
+    %      otherwise
+    %          continue;
+    %   end
         
-       disp(['You are ' value]);
-       break;
-    end
+    %   disp(['You are ' value]);
+    %   break;
+    % end
 end
 end
 
